@@ -13,7 +13,6 @@ export class RoomService {
     private roomRepository: Repository<Room>,
   ) {}
 
-
   async create(createRoomDto: CreateRoomDto) {
     return this.roomRepository.save(createRoomDto);
   }
@@ -21,6 +20,21 @@ export class RoomService {
   async findAll(searchRoomDto: SearchRoomDto) {
 
     if (searchRoomDto.arrivalAt && searchRoomDto.departureAt) {
+
+      /*
+      SELECT * FROM room AS r
+      WHERE id NOT IN (
+          SELECT rr.room_id FROM room_reserve as rr
+      WHERE (date '2021-08-11',  date '2021-08-23') OVERLAPS (rr.arrival_at, rr.departure_at) ::boolean
+    )
+
+      // r.id...
+      SELECT * FROM room as r
+      LEFT JOIN room_reserve rr on r.id = rr.room_id
+      WHERE NOT (date '2021-08-11',  date '2021-08-23') OVERLAPS (rr.arrival_at, rr.departure_at) ::boolean
+      OR rr.arrival_at IS NULL
+      */
+
       let q = `SELECT * FROM room AS r
                WHERE id NOT IN (
                  SELECT rr.room_id FROM room_reserve as rr
@@ -32,6 +46,7 @@ export class RoomService {
             searchRoomDto.departureAt
           ])
       // [ '2021-08-05', '2021-08-23' ]
+
 
       return res;
     }
