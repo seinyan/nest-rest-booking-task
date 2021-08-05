@@ -1,3 +1,7 @@
+Api URL 
+
+     http://127.0.0.1:3000/api 
+
 TypeOrm (TypeOrm  createdAt = created_at else error)
 
 PG_local (CREATE DATABASE nest_rest;)  
